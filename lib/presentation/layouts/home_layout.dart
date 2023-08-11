@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_store/business_logic/home_layout_cubit/home_layout_cubit.dart';
+import 'package:mini_store/business_logic/login_cubit/auth_cubit.dart';
 import 'package:mini_store/presentation/modules/login_screen.dart';
 import 'package:mini_store/shared/global_value.dart';
 
@@ -71,7 +72,7 @@ class HomeLayout extends StatelessWidget {
   Widget signoutButton(BuildContext context) {
     return IconButton(
       onPressed: () {
-        navigateToWithReplace(context, HomeLayout());
+        AuthCubit.get(context).logout(context);
       },
       icon: const Icon(Icons.logout),
     );

@@ -1,4 +1,4 @@
-part of 'login_cubit.dart';
+part of 'auth_cubit.dart';
 
 @immutable
 abstract class LoginState {}
@@ -17,13 +17,29 @@ class LoginErrorState extends LoginState{
 }
 
 
-class LoggingOut extends LoginState{}
+
+class LoggingOutState extends LoginState{}
 
 
-class LoggedOut extends LoginState{}
+class LoggedOutState extends LoginState{}
 
 
 class LogoutErrorState extends LoginState{
   String message;
   LogoutErrorState(this.message);
+}
+
+
+
+
+
+class RegisteringState extends LoginState{}
+
+
+class RegisteredState extends LoginState{}
+
+
+class RegisterErrorState extends LoginState{
+  String message;
+  RegisterErrorState(this.message);
 }

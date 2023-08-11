@@ -2,19 +2,19 @@ class UserModel {
 
   late final bool status;
   late final String message;
-  late final DataLogin data;
+  late final UserData data;
 
   UserModel.fromJson(Map<String, dynamic> json){
     status = json['status'];
     message = json['message'];
     if(json['data'] != null){
-      data = DataLogin.fromJson(json['data']);
+      data = UserData.fromJson(json['data']);
     }
   }
 
 }
 
-class DataLogin {
+class UserData {
 
   late final int id;
   late final String name;
@@ -25,14 +25,14 @@ class DataLogin {
   late final int credit;
   late final String token;
 
-  DataLogin.fromJson(Map<String, dynamic> json){
+  UserData.fromJson(Map<String, dynamic> json){
     id = json['id'];
     name = json['name'];
     email = json['email'];
     phone = json['phone'];
     image = json['image'];
-    points = json['points'];
-    credit = json['credit'];
+    points = json['points']?? 0;
+    credit = json['credit']?? 0;
     token = json['token'];
   }
 

@@ -6,15 +6,16 @@ import 'package:mini_store/data/models/user_model.dart';
 import 'package:mini_store/shared/global_value.dart';
 
 import '../../data/repositories/authentication_repository.dart';
+import '../home_layout_cubit/home_layout_cubit.dart';
 
 part 'login_state.dart';
 
-class LoginCubit extends Cubit<LoginState> {
+class AuthCubit extends Cubit<LoginState> {
   AuthRepository authRepository;
 
-  LoginCubit(this.authRepository) : super(LoginInitial());
+  AuthCubit(this.authRepository) : super(LoginInitial());
 
-  static LoginCubit get(context) => BlocProvider.of<LoginCubit>(context);
+  static AuthCubit get(context) => BlocProvider.of<AuthCubit>(context);
 
   //============================================
 
@@ -40,29 +41,58 @@ class LoginCubit extends Cubit<LoginState> {
       } else {
         emit(LoginErrorState(user.message));
       }
-    }).catchError((onError) {
-      print("LOCAL ERROR :: $onError");
-    });
+    })
+        .catchError((onError) {
+      print("LOCAL ERROR :: " + onError.toString());
+    })
+    ;
   }
 
   
   bool logoutLoading = false;
   
-  void logout() {
+  void logout(context) {
     logoutLoading = !logoutLoading;
-    emit(LoggingOut());
+    emit(LoggingOutState());
     authRepository.logout().then((logoutModel) {
-      LOGIN_TOKEN = "";
+
       logoutLoading = !logoutLoading;
       if(!logoutModel!.status) {
+        print(logoutModel.message);
         emit(LogoutErrorState(logoutModel.message));
       } else {
-        emit(LoggedOut());
+        LOGIN_TOKEN = "";
+        emit(LoggedOutState());
+
+        HomeLayoutCubit.get(context).changeItem(0);
       }
 
     }).catchError((onError) {
+      print("LOCAL ERROR :: $onError");
       emit(LogoutErrorState(onError));
-        print("LOCAL ERROR :: $onError");
     });
   }
+
+
+
+  bool registerLoading = false;
+
+  void register(String name, String email, String phone, String password) {
+    registerLoading = !registerLoading;
+    emit(RegisteringState());
+
+    authRepository.register(name, email, phone, password).then((user) {
+      registerLoading = !registerLoading;
+
+      if (user.status) {
+        LOGIN_TOKEN = user.data.token;
+        emit(RegisteredState());
+      } else {
+        emit(RegisterErrorState(user.message));
+      }
+    }).catchError((onError) {
+      print("LOCAL ERROR :: $onError");
+    });
+  }
+
 }
