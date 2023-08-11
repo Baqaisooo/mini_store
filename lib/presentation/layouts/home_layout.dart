@@ -4,7 +4,7 @@ import 'package:mini_store/business_logic/home_layout_cubit/home_layout_cubit.da
 import 'package:mini_store/presentation/modules/login_screen.dart';
 import 'package:mini_store/shared/global_value.dart';
 
-import '../../shared/shared_functions.dart';
+import '../../shared/shared_functions/navigation.dart';
 
 class HomeLayout extends StatelessWidget {
   const HomeLayout({super.key});
@@ -13,11 +13,12 @@ class HomeLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<HomeLayoutCubit, int>(
       listener: (context, state) {
+        HomeLayoutCubit cubit = HomeLayoutCubit.get(context);
         // TODO: implement listener
       },
       builder: (context, state) {
+        HomeLayoutCubit cubit = HomeLayoutCubit.get(context);
         // state here represent the index
-        print(state);
         return Scaffold(
           appBar: AppBar(
             title: const Text("mini store"),
@@ -30,12 +31,9 @@ class HomeLayout extends StatelessWidget {
                 onPressed: () {},
                 icon: Icon(Icons.shopping_cart_outlined),
               ),
-              LOGIN_TOKEN.isEmpty?
-              signInButton(context):
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.login),
-              ),
+              LOGIN_TOKEN.isEmpty ?
+              signInButton(context) :
+              signoutButton(context)
             ],
           ),
           body: HomeLayoutCubit.bottomNavBarScreens[state],
@@ -61,12 +59,21 @@ class HomeLayout extends StatelessWidget {
     );
   }
 
-  Widget signInButton(context){
+  Widget signInButton(BuildContext context) {
     return IconButton(
       onPressed: () {
-        navigateTo(context,LoginScreen());
+        navigateTo(context, LoginScreen());
       },
       icon: const Icon(Icons.login),
+    );
+  }
+
+  Widget signoutButton(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        navigateToWithReplace(context, HomeLayout());
+      },
+      icon: const Icon(Icons.logout),
     );
   }
 }

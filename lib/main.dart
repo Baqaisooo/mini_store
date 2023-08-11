@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_store/business_logic/home_layout_cubit/home_layout_cubit.dart';
+import 'package:mini_store/business_logic/login_cubit/login_cubit.dart';
+import 'package:mini_store/data/api_services/dio_helper.dart';
+import 'package:mini_store/data/repositories/authentication_repository.dart';
 import 'package:mini_store/data/shared_preferences/cache_helper.dart';
 import 'package:mini_store/presentation/layouts/home_layout.dart';
 import 'package:mini_store/shared/bloc_observer.dart';
 import 'package:mini_store/shared/global_value.dart';
 
-import 'business_logic/home_layout_cubit/home_layout_cubit.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
-  LOGIN_TOKEN = await CacheHelper.getData(CacheHelperKeys.token)?? "";
+  LOGIN_TOKEN = await CacheHelper.getData(CacheHelperKeys.token) ?? "";
+  DioHelper.dioHelper = DioHelper();
+
   runApp(const MyApp());
 }
 
@@ -24,9 +29,13 @@ class MyApp extends StatelessWidget {
       title: 'Mini Store',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFF003366), // The primary color of your app
-        colorScheme: ColorScheme.fromSwatch()
-            .copyWith(secondary: const Color(0xFFDAA520),), // The accent color used for buttons, selection, etc.
+        fontFamily: "Changa",
+        primaryColor: const Color(0xFF003366),
+        // The primary color of your app
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: const Color(0xFFDAA520),
+        ),
+        // The accent color used for buttons, selection, etc.
 
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -40,7 +49,6 @@ class MyApp extends StatelessWidget {
           elevation: 4,
           iconTheme: IconThemeData(color: Colors.white),
           titleTextStyle: TextStyle(fontSize: 20, color: Colors.white),
-
         ),
 
         buttonTheme: const ButtonThemeData(
@@ -61,18 +69,20 @@ class MyApp extends StatelessWidget {
         ),
 
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Colors.white, // Background color of the bottom navigation bar
-          selectedItemColor: Color(0xFFEF6C00), // Selected item color
-          unselectedItemColor: Colors.black54, // Unselected item color
+          backgroundColor: Colors.white,
+          // Background color of the bottom navigation bar
+          selectedItemColor: Color(0xFFEF6C00),
+          // Selected item color
+          unselectedItemColor: Colors.black54,
+          // Unselected item color
           selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
           unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
         ),
-
       ),
-      home: BlocProvider(
-  create: (context) => HomeLayoutCubit(),
-  child: HomeLayout(),
-),
+      home: BlocProvider<HomeLayoutCubit>(
+        create: (context) => HomeLayoutCubit(),
+        child: HomeLayout(),
+      ),
     );
   }
 }

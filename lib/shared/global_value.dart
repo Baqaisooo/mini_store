@@ -3,7 +3,7 @@
 String LOGIN_TOKEN = "";
 
 enum LanguageDisplay{ ar, en}
-Enum LANG = LanguageDisplay.ar;
+Enum LANG = LanguageDisplay.en;
 
 
 enum Theme_mode{ light, dark}
